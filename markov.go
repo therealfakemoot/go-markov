@@ -52,10 +52,54 @@ func (n *Nodes) Get(nk NodeKey) *Node {
 
 // Chain does stuff
 type Chain struct {
-	chain map[NodeKey][]Node
+	Mode  int
+	Chain map[NodeKey]Nodes
+}
+
+// Count returns the number of keys in the markov chain
+func (c *Chain) Count() int {
+	return len(c.Chain)
+}
+
+// Update adds new keys and updates existing node counts based on a given input string
+func (c *Chain) Update(s string) {
+
+	words := Normalize(s)
+
+	for _, w := range words {
+		k := NodeKey(w)
+		nodes, ok := c.Chain[k]
+
+		if ok {
+			n := nodes.Get(k)
+			n.Count++
+		} else {
+			n := Node{Key: []string{w}, Count: 1}
+			c.Chain[k] = Nodes{&n}
+		}
+
+	}
+}
+
+// Speak produces a sentence at random from the chain.
+func (c *Chain) Speak(count int) string {
+	var res string
+	return res
+}
+
+// Respond produces a sentence given a prompt.
+func (c *Chain) Respond(prompt string, count int) string {
+	var res string
+	return res
 }
 
 // ImportFile does stuff
 func (c *Chain) ImportFile(f *os.File) {
 
+}
+
+// NewChain returns a new Markov Chain
+func NewChain(mode int) *Chain {
+	c := Chain{Mode: mode, Chain: make(map[NodeKey]Nodes)}
+	return &c
 }
