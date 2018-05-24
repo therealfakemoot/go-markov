@@ -37,6 +37,19 @@ func (n Node) HashKey() NodeKey {
 	return n.Key.HashKey()
 }
 
+// Nodes is a list of probability entries
+type Nodes []*Node
+
+// Get iterates through a Nodes sequence and finds a matching probability entry.
+func (n *Nodes) Get(nk NodeKey) *Node {
+	for _, n := range *n {
+		if n.HashKey() == nk {
+			return n
+		}
+	}
+	return nil
+}
+
 // Chain does stuff
 type Chain struct {
 	chain map[NodeKey][]Node
