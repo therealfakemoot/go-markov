@@ -2,8 +2,18 @@ package main
 
 import (
 	"os"
+	"regexp"
 	"strings"
 )
+
+// Normalize takes an input string and returns a slice of whitespace spearated words in all lowercase with all punctuation removed.
+func Normalize(s string) []string {
+	// This regex is neat. \p{L} means "any letter in any language". \p{Z} means "any whitespace character in any unicode language". I'm using these so the markov engine can be 100% unicode friendly and language agnostic.
+	reg, _ := regexp.Compile("[^\\p{L}\\p{Z}]+")
+	words := strings.Split(strings.ToLower(reg.ReplaceAllString(s, "")), " ")
+	return words
+
+}
 
 // Key represents a n-tuple containing a word sequence
 type Key []string
